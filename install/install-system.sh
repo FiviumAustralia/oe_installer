@@ -49,7 +49,7 @@ echo Installing required system packages
 export DEBIAN_FRONTEND=noninteractive
 debconf-set-selections <<< 'mariadb-server-5.5 mysql-server/root_password password password'
 debconf-set-selections <<< 'mariadb-server-5.5 mysql-server/root_password_again password password'
-apt install -y git-core libapache2-mod-php5 php5-cli php5-mysql php5-ldap php5-curl php5-xsl php5-gd imagemagick php5-imagick libjpeg62 mariadb-server mariadb-client debconf-utils unzip xfonts-75dpi default-jre libgamin0 gamin openjdk-7-jdk xfonts-base ruby ant libbatik-java libreoffice-core libreoffice-common libreoffice-writer php5-mcrypt node.js npm
+apt install -y git-core libapache2-mod-php5.6 php5.6-cli php5.6-mysql php5.6-ldap php5.6-curl php5.6-xsl php5.6-gd imagemagick php5.6-imagick libjpeg62 mariadb-server mariadb-client debconf-utils unzip xfonts-75dpi default-jre libgamin0 gamin openjdk-8-jdk xfonts-base ruby ant libbatik-java libreoffice-core libreoffice-common libreoffice-writer php5.6-mcrypt node.js npm
 
 
 # wkhtmltox is now bundled in the repository. Original download location is:
@@ -59,23 +59,26 @@ dpkg -i --force-depends wkhtmltox-0.12.2.1_linux-trusty-amd64.deb
 
 
 #  Install pre-compiled FAM module and configure PHP to use it
-sed -i "s/;   extension=msql.so/extension=fam.so/" /etc/php5/apache2/php.ini
-sed -i "s/;   extension=msql.so/extension=fam.so/" /etc/php5/cli/php.ini
-cp /vagrant/install/fam.so /usr/lib/php5/20121212/
+sed -i "s/;   extension=msql.so/extension=fam.so/" /etc/php/5.6/apache2/php.ini
+sed -i "s/;   extension=msql.so/extension=fam.so/" /etc/php/5.6/cli/php.ini
+cp /vagrant/install/fam.so /usr/lib/php/5.6//20121212/
 
 
 # Enable display_errors and error logging for PHP, plus configure timezone
+if [[ -d /var/log/php ]]; then
+	rm -rf /var/log/php;
+fi
 mkdir /var/log/php
 chown www-data /var/log/php
-sed -i "s/^display_errors = Off/display_errors = On/" /etc/php5/apache2/php.ini
-sed -i "s/^display_startup_errors = Off/display_startup_errors = On/" /etc/php5/apache2/php.ini
-sed -i "s/^;date.timezone =/date.timezone = \"Europe\/London\"/" /etc/php5/apache2/php.ini
+sed -i "s/^display_errors = Off/display_errors = On/" /etc/php/5.6/apache2/php.ini
+sed -i "s/^display_startup_errors = Off/display_startup_errors = On/" /etc/php/5.6/apache2/php.ini
+sed -i "s/^;date.timezone =/date.timezone = \"Europe\/London\"/" /etc/php/5.6/apache2/php.ini
 
-sed -i "s/;error_log = php_errors.log/error_log = \/var\/log\/php_errors.log/" /etc/php5/apache2/php.ini
-sed -i "s/^display_errors = Off/display_errors = On/" /etc/php5/cli/php.ini
-sed -i "s/^display_startup_errors = Off/display_startup_errors = On/" /etc/php5/cli/php.ini
-sed -i "s/;error_log = php_errors.log/error_log = \/var\/log\/php_errors.log/" /etc/php5/cli/php.ini
-sed -i "s/^;date.timezone =/date.timezone = \"Europe\/London\"/" /etc/php5/cli/php.ini
+sed -i "s/;error_log = php_errors.log/error_log = \/var\/log\/php_errors.log/" /etc/php/5.6/apache2/php.ini
+sed -i "s/^display_errors = Off/display_errors = On/" /etc/php/5.6/cli/php.ini
+sed -i "s/^display_startup_errors = Off/display_startup_errors = On/" /etc/php/5.6/cli/php.ini
+sed -i "s/;error_log = php_errors.log/error_log = \/var\/log\/php_errors.log/" /etc/php/5.6/cli/php.ini
+sed -i "s/^;date.timezone =/date.timezone = \"Europe\/London\"/" /etc/php/5.6/cli/php.ini
 
 a2enmod rewrite
 cp /vagrant/install/bashrc /etc/bash.bashrc
