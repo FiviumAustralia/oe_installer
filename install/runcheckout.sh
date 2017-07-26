@@ -25,55 +25,47 @@ showhelp=0
 
 if [ -z "$1" ]; then showhelp=1; fi
 
-for i in "$@"
+while [[ $# -gt 0 ]]
 do
-case $i in
-	-f|-force|--force) force=1
+case $1 in
+	-f|-force|--force) force=1; shift;
 		## Force will ignore any uncomitted changes and checkout over the top
 		;;
-	-ff|--killmodules|--kill-modules) force=1; killmodules=1
+	-ff|--killmodules|--kill-modules) force=1; killmodules=1; shift;
 		## killmodules should only be used when moving backwards from versions 1.12.1 or later to version 1.12 or earlier - removes the /protected/modules folder and re-clones all modules
 		;;
-	--develop|--d|-d) defaultbranch=develop
+	--develop|--d|-d) defaultbranch=develop; shift;
 		## develop will use develop baranches when the named branch does not exist for a module (by default it would use master)
 		;;
-	--nomigrate|--no-migrate|--n|-n) fixparams="$fixparams --no-migrate"
+	--nomigrate|--no-migrate|--n|-n) fixparams="$fixparams --no-migrate"; shift;
 		## nomigrate will prevent database migrations from running automatically at the end of checkout
 		;;
-	--root|-r|--r|--remote) customgitroot=1
+	--root|-r|--r|--remote) gitroot="$2"; shift; shift;
 		## Await custom root for git repo in next parameter
 		;;
-	--no-summary) nosummary=1
+	--no-summary) nosummary=1; shift;
 		## don't show summary of checkout at completion
 		;;
-	--no-fix) fix=0
+	--no-fix) fix=0; shift;
 		## don't run oe-fix at completion
 		;;
-	--no-pull|--nopull) nopull=1
+	--no-pull|--nopull) nopull=1; shift;
 		## Do not issue git pull after checkout
 		;;
-	--no-compile) compile=0
+	--no-compile) compile=0; shift;
 		## don't compile java
 	;;
-    -u*) username="${i:2}"
+    -u*) username="${1:2}"; shift;
     ;;
-    -p*) pass="${i:2}"
+    -p*) pass="${1:2}"; echo "${1:2}"; shift;
     ;;
-	--ssh|-ssh) usessh=1
+	--ssh|-ssh) usessh=1; shift;
 	;;
-    --help) showhelp=1
+    --help) showhelp=1; shift;
     ;;
-	*)  if [ ! -z "$i" ]; then
-			if [ "$customgitroot" = "1" ]; then
-				gitroot=$i;
-				customgitroot=0
-				## Set root path to repo
-			elif [ "$branch" == "master" ]; then
-				branch=$i
-			else echo "Unknown command line: $i"
-				## Set branch name
-			fi
-		fi
+    --branch | -b) branch="$2"; shift; shift;
+	;;
+	*)  shift;
     ;;
 esac
 done

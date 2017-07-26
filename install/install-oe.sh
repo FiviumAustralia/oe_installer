@@ -78,7 +78,7 @@ case $1 in
 	--root|-r|--r|--remote) gitroot=$2; checkoutparams="$checkoutparams -r $2"; shift; shift;
 		## Await custom root for git repo in net parameter
 		;;
-    -u*) username="${1:2}"; checkoutparams="$checkoutparams $1"; shift;
+    -u*) username="${1:2}";checkoutparams="$checkoutparams $1"; shift;
     ;;
     -p*) pass="${1:2}"; checkoutparams="$checkoutparams $1"; shift; 
     ;;
@@ -219,7 +219,7 @@ Do you wish to continue?
 fi
 
 echo calling oe-checkout with $checkoutparams
-oe-checkout $branch -f --no-migrate --no-summary --no-fix $checkoutparams
+oe-checkout -f --no-migrate --no-summary --no-fix $checkoutparams
 
 
 cd /var/www/openeyes/protected
