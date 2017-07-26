@@ -57,46 +57,36 @@ checkoutparams=""
 accept=0
 
 # Process command line inputs
-for i in "$@"
+while [ $# -gt 0 ]
 do
-case $i in
-    --live|-l|--upgrade) live=1
+case $1 in
+    --live|-l|--upgrade) live=1; shift
 		## live will install for production ready environment
 		;;
-	--develop|-d|--d) develop=1; defaultbranch=develop; checkoutparams="$checkoutparams $i"
+	--develop|-d|--d) develop=1; defaultbranch=develop; checkoutparams="$checkoutparams $1"; shift;
 		## develop set default branches to develop if the named branch does not exist for a module
 		;;
-	--force|-f|--f) force=1
+	--force|-f|--f) force=1; shift;
 		## force will delete the www/openeyes directory without prompting - use with caution - useful to refresh an installation, or when moving between versions <=1.12 and verrsions >= 1.12.1
 		;;
-	--clean|-ff|--ff) force=1; cleanconfig=1
+	--clean|-ff|--ff) force=1; cleanconfig=1; shift;
 		## will completely wipe any existing openeyes configuration from /etc/openeyes - use with caution
 		;;
-    --accept) accept=1;
+    --accept) accept=1; shift;
     		## Accepts the disclaimer, without pausing the installation
     		;;
-	--root|-r|--r|--remote) customgitroot=1
+	--root|-r|--r|--remote) gitroot=$2; checkoutparams="$checkoutparams -r $2"; shift; shift;
 		## Await custom root for git repo in net parameter
 		;;
-    -u*) username="${i:2}"; checkoutparams="$checkoutparams $i"
+    -u*) username="${1:2}"; checkoutparams="$checkoutparams $1"; shift;
     ;;
-    -p*) pass="${i:2}"; checkoutparams="$checkoutparams $i"
+    -p*) pass="${1:2}"; checkoutparams="$checkoutparams $1"; shift; 
     ;;
-    --ssh|-ssh) usessh=1; checkoutparams="$checkoutparams $i"
+    --ssh|-ssh) usessh=1; checkoutparams="$checkoutparams $1"; shift;
 	;;
-    --help) showhelp=1
+    --help) showhelp=1; shift;
     ;;
-	*)  if [ ! -z "$i" ]; then
-			if [ "$customgitroot" = "1" ]; then
-				gitroot=$i
-				customgitroot=0
-                $checkoutparams="$checkoutparams -r $i"
-				## Set root path to repo
-			else
-				if [ "$branch" == "master" ]; then branch=$i; else echo "Unknown command line: $i"; fi
-				## Set branch name
-			fi
-		fi
+	--branch | -b ) branch=$2; checkoutparams="$checkoutparams -b $2"; shift; shift; 
     ;;
 esac
 done
@@ -309,6 +299,7 @@ if [ ! "$live" = "1" ]; then
 	create database openeyes;
 	grant all privileges on openeyes.* to 'openeyes'@'%' identified by 'openeyes';
 	flush privileges;
+	ALTER DATABASE openeyes CHARACTER SET = 'utf8';
 	" > /tmp/openeyes-mysql-create.sql
 
 	mysql -u root "-ppassword" < /tmp/openeyes-mysql-create.sql
