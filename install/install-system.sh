@@ -31,14 +31,14 @@ fi
 
 # SET UP SWAP SPACE
 
-fallocate -l 1024M /swapfile
-chmod 600 /swapfile
-mkswap /swapfile
-swapon /swapfile
-echo /swapfile   none    swap    sw    0   0 >>/etc/fstab
+# fallocate -l 1024M /swapfile
+# chmod 600 /swapfile
+# mkswap /swapfile
+# swapon /swapfile
+# echo /swapfile   none    swap    sw    0   0 >>/etc/fstab
 
-sysctl vm.swappiness=10
-echo 'vm.swappiness = 10' >> /etc/sysctl.conf
+# sysctl vm.swappiness=10
+# echo 'vm.swappiness = 10' >> /etc/sysctl.conf
 
 
 echo Performing package updates
