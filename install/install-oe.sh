@@ -188,8 +188,8 @@ Do you wish to continue?
 		select yn in "Yes" "No"; do
 			case $yn in
 				Yes ) echo "OK."; force="1"; break;;
-				No ) echo "OK, aborting. Nothing has been changed...
-				"; exit;;
+				No ) echo "OK, Nothing has been changed...
+				"; break; ;;
 			esac
 		done
 	fi
@@ -328,7 +328,7 @@ if [ ! "$live" = "1" ]; then
 
 	echo Downloading database
 	cd /var/www/openeyes/protected/modules
-	if ! git clone -b $branch ${basestring}/Sample.git sample ; then
+	if ! git clone -b $defaultbranch ${basestring}/Sample.git sample ; then
 		echo "$branch doesn't exist for sample database. Falling back to $defaultbranch branch for openeyes..."
         if ! git clone -b $defaultbranch ${basestring}/sample.git sample ; then
 			# If we cannot find default branch at specifeid remote, fall back to OE git hub
