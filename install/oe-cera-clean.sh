@@ -26,9 +26,9 @@ BEGIN
   consolidate_loop: lOOP
     FETCH c_tabs INTO tab_name;
     IF done THEN LEAVE consolidate_loop; END IF;
-    SET @query = concat(' UPDATE openeyes.', tab_name, 
+    SET @query = concat(' UPDATE openeyes.', tab_name,
                         ' SET ', col_name, ' = ', new_val,
-                        ' WHERE ', col_name ' IS NOT NULL;');
+                        ' WHERE ', col_name, ' IS NOT NULL;');
     PREPARE stmt FROM @query;
     EXECUTE stmt;
   END LOOP;
@@ -44,14 +44,14 @@ CALL consolidate_int_data_column('filter_firm', 1);
 CALL consolidate_int_data_column('last_firm_id', 1);
 CALL consolidate_int_data_column('consultant', 1);
 CALL consolidate_int_data_column('consultant_id', 1);
+DELETE FROM openeyes.firm WHERE id != 1;
 
 SET FOREIGN_KEY_CHECKS = 0;
 DELETE FROM openeyes.site WHERE id != 1;
 CALL consolidate_int_data_column('site_id', 1);
 CALL consolidate_int_data_column('last_site_id', 1);
+DELETE FROM openeyes.patient;
 SET FOREIGN_KEY_CHECKS = 1;
-
-DETELE FROM openeyes.firm WHERE id != 1;
 
 DROP PROCEDURE IF EXISTS consolidate_int_data_column;
 ;;
