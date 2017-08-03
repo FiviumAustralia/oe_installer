@@ -8,7 +8,7 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 echo "
-USE openeyes;
+USE openeyes
 
 DROP PROCEDURE IF EXISTS consolidate_int_data_column;
 CREATE PROCEDURE consolidate_int_data_column(col_name VARCHAR(256), new_val INT)
