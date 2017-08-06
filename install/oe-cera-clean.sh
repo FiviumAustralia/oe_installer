@@ -51,6 +51,7 @@ DELETE FROM openeyes.site WHERE id != 1;
 CALL consolidate_int_data_column('site_id', 1);
 CALL consolidate_int_data_column('last_site_id', 1);
 DELETE FROM openeyes.patient;
+DELETE FROM openeyes.user WHERE id != 1;
 SET FOREIGN_KEY_CHECKS = 1;
 
 DROP PROCEDURE IF EXISTS consolidate_int_data_column;
