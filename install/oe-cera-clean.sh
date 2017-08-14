@@ -10,54 +10,26 @@ fi
 echo "
 USE openeyes
 
-DROP PROCEDURE IF EXISTS consolidate_int_data_column;
-CREATE PROCEDURE consolidate_int_data_column(col_name VARCHAR(256), new_val INT)
-BEGIN
-  DECLARE done INT DEFAULT FALSE;
-  DECLARE tab_name VARCHAR(256);
-  DECLARE c_tabs CURSOR FOR
-    SELECT DISTINCT table_name
-    FROM information_schema.COLUMNS
-    WHERE column_name = col_name
-      AND table_schema = 'openeyes';
-  DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+INSERT INTO openeyes.import_source
+  (name, created_user_id, last_modified_user_id, created_date, last_modified_date)
+VALUES
+  ('Fivium Australia', 1, 1, '1900-01-01 00:00:00', '1900-01-01 00:00:00');
 
-  OPEN c_tabs;
-  consolidate_loop: lOOP
-    FETCH c_tabs INTO tab_name;
-    IF done THEN LEAVE consolidate_loop; END IF;
-    SET @query = concat(' UPDATE openeyes.', tab_name,
-                        ' SET ', col_name, ' = ', new_val,
-                        ' WHERE ', col_name, ' IS NOT NULL;');
-    PREPARE stmt FROM @query;
-    EXECUTE stmt;
-  END LOOP;
-  CLOSE c_tabs;
-  COMMIT;
-END;
+INSERT INTO openeyes.institution
+  (name, remote_id, last_modified_user_id, last_modified_date, created_user_id, created_date, short_name, contact_id, source_id, active)
+VALUES
+  ('Center for Eye Research Australia', 'CERA', 1, NOW(), 1, NOW(), '', 576752, LAST_INSERT_ID(), 1);
 
-CALL consolidate_int_data_column('firm_id', 1);
-CALL consolidate_int_data_column('to_firm_id', 1);
-CALL consolidate_int_data_column('archive_firm_id', 1);
-CALL consolidate_int_data_column('assignment_firm_id', 1);
-CALL consolidate_int_data_column('filter_firm', 1);
-CALL consolidate_int_data_column('last_firm_id', 1);
-CALL consolidate_int_data_column('consultant', 1);
-CALL consolidate_int_data_column('consultant_id', 1);
-DELETE FROM openeyes.firm WHERE id != 1;
+INSERT INTO openeyes.site
+  (name, remote_id, short_name, location_code, fax, telephone, last_modified_user_id, last_modified_date, created_user_id, created_date, institution_id, location, contact_id, replyto_contact_id, source_id, active)
+VALUES
+  ('Center for Eye Research Australia', 'CERA', 'CERA', '', '', '0399298360', 1, NOW(), 1, NOW(), LAST_INSERT_ID(), '', 576755, null, null, 1);
 
-SET FOREIGN_KEY_CHECKS = 0;
-DELETE FROM openeyes.site WHERE id != 1;
-CALL consolidate_int_data_column('site_id', 1);
-CALL consolidate_int_data_column('last_site_id', 1);
-DELETE FROM openeyes.patient;
-DELETE FROM openeyes.user WHERE id != 1;
-SET FOREIGN_KEY_CHECKS = 1;
-
-DROP PROCEDURE IF EXISTS consolidate_int_data_column;
+UPDATE institution SET active = FALSE WHERE LOWER(name) NOT LIKE '%center for eye research%';
+UPDATE site SET active = TRUE WHERE remote_id != 'CERA';
 ;;
-" > /tmp/openeyes-mysql-consolidate-firms.sql
+" > /tmp/openeyes-mysql-cera-setup.sql
 
 
-mysql -u root "-ppassword" --delimiter=";;" < /tmp/openeyes-mysql-consolidate-firms.sql
-rm /tmp/openeyes-mysql-consolidate-firms.sql
+mysql -u root "-ppassword" --delimiter=";;" < /tmp/openeyes-mysql-cera-setup.sql
+rm /tmp/openeyes-mysql-cera-setup.sql

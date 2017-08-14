@@ -330,7 +330,7 @@ if [ ! "$live" = "1" ]; then
 	cd /var/www/openeyes/protected/modules
 	if ! git clone -b $defaultbranch ${basestring}/Sample.git sample ; then
 		echo "$branch doesn't exist for sample database. Falling back to $defaultbranch branch for openeyes..."
-        if ! git clone -b $defaultbranch ${basestring}/sample.git sample ; then
+        if ! git clone -b $branch ${basestring}/sample.git sample ; then
 			# If we cannot find default branch at specifeid remote, fall back to OE git hub
 			if [ "$gitroot != "openeyes ]; then
 				echo "could not find $defaultbranch at $gitroot remote. Falling back to openeyes official repo"
@@ -379,6 +379,15 @@ if [ ! "$live" = "1" ]; then
 	CustomLog /var/log/apache2/access.log combined
 	</VirtualHost>
 	" > /etc/apache2/sites-available/000-default.conf
+
+	# # Remove banner
+	echo "
+	use openeyes;
+	DELETE FROM openeyes.setting_installation WHERE \`key\`='watermark';
+	" > /tmp/openeyes-mysql-setbanner.sql
+
+	mysql -u root "-ppassword" < /tmp/openeyes-mysql-setbanner.sql
+	rm /tmp/openeyes-mysql-setbanner.sql
 
 	apache2ctl restart
 fi

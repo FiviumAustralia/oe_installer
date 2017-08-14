@@ -61,7 +61,7 @@ dpkg -i --force-depends wkhtmltox-0.12.2.1_linux-trusty-amd64.deb
 #  Install pre-compiled FAM module and configure PHP to use it
 sed -i "s/;   extension=msql.so/extension=fam.so/" /etc/php/5.6/apache2/php.ini
 sed -i "s/;   extension=msql.so/extension=fam.so/" /etc/php/5.6/cli/php.ini
-mkdir /usr/lib/php/5.6/20121212/
+mkdir /usr/lib/php/5.6/20121212/ -p
 cp /vagrant/install/fam.so /usr/lib/php/5.6/20121212/
 
 
@@ -69,7 +69,7 @@ cp /vagrant/install/fam.so /usr/lib/php/5.6/20121212/
 if [[ -d /var/log/php ]]; then
 	rm -rf /var/log/php;
 fi
-mkdir /var/log/php
+mkdir /var/log/php -p
 chown www-data /var/log/php
 sed -i "s/^display_errors = Off/display_errors = On/" /etc/php/5.6/apache2/php.ini
 sed -i "s/^display_startup_errors = Off/display_startup_errors = On/" /etc/php/5.6/apache2/php.ini
