@@ -88,6 +88,8 @@ case $1 in
     ;;
 	--branch | -b ) branch=$2; checkoutparams="$checkoutparams -b $2"; shift; shift; 
     ;;
+    *) shift;
+	;;
 esac
 done
 
