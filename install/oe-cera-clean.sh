@@ -28,7 +28,7 @@ BEGIN
 
   INSERT INTO openeyes.institution
   (name, remote_id, last_modified_user_id, last_modified_date, created_user_id, created_date, short_name, contact_id, source_id, active)
-  VALUES ('Center for Eye Research Australia', 'CERA', 1, NOW(), 1, NOW(), '', 576752, import_source_id, 1);
+  VALUES ('Center for Eye Research Australia', 'CERA', 1, NOW(), 1, NOW(), '', contact_id, import_source_id, 1);
   set institution_id = LAST_INSERT_ID();
   COMMIT;
 
