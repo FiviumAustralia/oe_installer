@@ -13,6 +13,7 @@ USE openeyes
 SET FOREIGN_KEY_CHECKS = 0;
 DELETE FROM user WHERE id != 1;
 DELETE FROM patient;
+DELETE FROM ophtrintravitinjection_injectionuser;
 SET FOREIGN_KEY_CHECKS = 1;
 
 UPDATE firm SET active = FALSE WHERE id !=1 AND consultant_id IS NOT NULL;
