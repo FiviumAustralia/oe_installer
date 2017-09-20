@@ -86,7 +86,7 @@ case $1 in
 	;;
     --help) showhelp=1; shift;
     ;;
-	--branch | -b ) branch=$2; checkoutparams="$checkoutparams -b $2"; shift; shift; 
+	--branch | -b ) branch=$2; checkoutparams="$checkoutparams -b $2"; echo '$branch';shift; shift; 
     ;;
     *) shift;
 	;;
@@ -330,9 +330,11 @@ if [ ! "$live" = "1" ]; then
 
 	echo Downloading database
 	cd /var/www/openeyes/protected/modules
-	if ! git clone -b $defaultbranch ${basestring}/Sample.git sample ; then
+	if ! git clone -b $branch ${basestring}/Sample.git sample ; then
+		echo "$branch ${basestring}/Sample.git not found"
+		exit;
 		echo "$branch doesn't exist for sample database. Falling back to $defaultbranch branch for openeyes..."
-        if ! git clone -b $branch ${basestring}/sample.git sample ; then
+        if ! git clone -b $defaultbranch ${basestring}/sample.git sample ; then
 			# If we cannot find default branch at specifeid remote, fall back to OE git hub
 			if [ "$gitroot != "openeyes ]; then
 				echo "could not find $defaultbranch at $gitroot remote. Falling back to openeyes official repo"
@@ -343,16 +345,6 @@ if [ ! "$live" = "1" ]; then
 
 	cd sample/sql
 	mysql -uroot "-ppassword" -D openeyes < openeyes_sample_data.sql
-
-	# # Set banner to show branch name
-	echo "
-	use openeyes;
-	UPDATE openeyes.setting_installation s SET s.value='New openeyes installation - $branch' WHERE s.key='watermark';
-	" > /tmp/openeyes-mysql-setbanner.sql
-
-	mysql -u root "-ppassword" < /tmp/openeyes-mysql-setbanner.sql
-	rm /tmp/openeyes-mysql-setbanner.sql
-
 fi
 
 
