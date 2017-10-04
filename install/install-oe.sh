@@ -40,7 +40,7 @@ cp -n /var/www/openeyes/protected/config/local.sample/console.sample.php /var/ww
 # Chose branch / tag to clone (default is master)
 # set live
 branch=master
-defaultbranch=master
+defaultbranch=feature/v2-cera
 live=0
 develop=0
 force=0
@@ -332,7 +332,6 @@ if [ ! "$live" = "1" ]; then
 	cd /var/www/openeyes/protected/modules
 	if ! git clone -b $branch ${basestring}/Sample.git sample ; then
 		echo "$branch ${basestring}/Sample.git not found"
-		exit;
 		echo "$branch doesn't exist for sample database. Falling back to $defaultbranch branch for openeyes..."
         if ! git clone -b $defaultbranch ${basestring}/sample.git sample ; then
 			# If we cannot find default branch at specifeid remote, fall back to OE git hub
