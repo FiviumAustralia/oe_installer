@@ -204,6 +204,7 @@ DELETE FROM site_subspecialty_operative_device;
 DELETE FROM trial_patient;
 DELETE FROM unique_codes_mapping;
 DELETE FROM worklist_patient;
+DELETE FROM gp;
 
 DELETE FROM firm
 WHERE name NOT LIKE '%firm'
