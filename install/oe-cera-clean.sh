@@ -149,7 +149,7 @@ DELETE FROM measurement_reference;
 DELETE FROM media_data;
 DELETE FROM mview_datapoint_node;
 DELETE FROM ophciexamination_element_set_item;
-DELETE FROM ophciexamination_element_set;
+DELETE FROM ophciexamination_element_set WHERE workflow_id != 1;
 DELETE FROM ophciexamination_event_elementset_assignment;
 DELETE FROM ophciexamination_workflow WHERE id != 1;
 DELETE FROM ophciexamination_workflow_rule WHERE workflow_id != 1;
