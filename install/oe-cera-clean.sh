@@ -225,6 +225,329 @@ SET FOREIGN_KEY_CHECKS = 1;
 
 UPDATE firm SET active = FALSE WHERE id !=1 AND consultant_id IS NOT NULL;
 UPDATE site SET active = FALSE WHERE remote_id != 'CERA';
+
+
+#Clean up broken foreign keys
+SET FOREIGN_KEY_CHECKS = 0; #Don't mind this, it looks odd but it's necessary
+DELETE FROM openeyes.address
+WHERE contact_id NOT IN (
+    SELECT id
+    FROM openeyes.contact
+);
+
+DELETE FROM openeyes.authassignment
+WHERE userid NOT IN (
+    SELECT id
+    FROM openeyes.user
+);
+
+DELETE FROM openeyes.contact_location
+WHERE contact_id NOT IN (
+    SELECT id
+    FROM openeyes.contact
+);
+
+DELETE FROM openeyes.contact_location
+WHERE institution_id NOT IN (
+    SELECT id
+    FROM openeyes.institution
+);
+
+DELETE FROM openeyes.firm
+WHERE consultant_id NOT IN (
+    SELECT id
+    FROM openeyes.user
+);
+
+DELETE FROM openeyes.ophciexamination_colourvision_reading
+WHERE element_id NOT IN (
+    SELECT id
+    FROM openeyes.et_ophciexamination_colourvision
+);
+
+DELETE FROM openeyes.ophciexamination_comorbidities_assignment
+WHERE element_id NOT IN (
+    SELECT id
+    FROM openeyes.et_ophciexamination_comorbidities
+);
+
+DELETE FROM openeyes.ophciexamination_diagnosis
+WHERE element_diagnoses_id NOT IN (
+    SELECT id
+    FROM openeyes.et_ophciexamination_diagnoses
+);
+
+DELETE FROM openeyes.ophciexamination_dilation_treatment
+WHERE element_id NOT IN (
+    SELECT id
+    FROM openeyes.et_ophciexamination_dilation
+);
+
+DELETE FROM openeyes.ophciexamination_history_medications_entry
+WHERE element_id NOT IN (
+    SELECT id
+    FROM openeyes.et_ophciexamination_history_medications
+);
+
+DELETE FROM openeyes.ophciexamination_injectmanagecomplex_answer
+WHERE element_id NOT IN (
+    SELECT id
+    FROM openeyes.et_ophciexamination_injectionmanagementcomplex
+);
+
+DELETE FROM openeyes.ophciexamination_injectmanagecomplex_risk_assignment
+WHERE element_id NOT IN (
+    SELECT id
+    FROM openeyes.et_ophciexamination_injectionmanagementcomplex
+);
+
+DELETE FROM openeyes.ophciexamination_intraocularpressure_value
+WHERE element_id NOT IN (
+    SELECT id
+    FROM openeyes.et_ophciexamination_intraocularpressure
+);
+
+DELETE FROM openeyes.ophciexamination_nearvisualacuity_reading
+WHERE element_id NOT IN (
+    SELECT id
+    FROM openeyes.et_ophciexamination_nearvisualacuity
+);
+
+DELETE FROM openeyes.ophciexamination_oct_fluidtype_assignment
+WHERE element_id NOT IN (
+    SELECT id
+    FROM openeyes.et_ophciexamination_oct
+);
+
+DELETE FROM openeyes.ophciexamination_systemic_diagnoses_diagnosis
+WHERE element_id NOT IN (
+    SELECT id
+    FROM openeyes.et_ophciexamination_systemic_diagnoses
+);
+
+DELETE FROM openeyes.ophciexamination_visualacuity_reading
+WHERE element_id NOT IN (
+    SELECT id
+    FROM openeyes.et_ophciexamination_visualacuity
+);
+
+DELETE FROM openeyes.ophcocorrespondence_firm_site_secretary
+WHERE firm_id NOT IN (
+    SELECT id
+    FROM openeyes.firm
+);
+
+DELETE FROM openeyes.ophcocorrespondence_letter_enclosure
+WHERE element_letter_id NOT IN (
+    SELECT id
+    FROM openeyes.et_ophcocorrespondence_letter
+);
+
+DELETE FROM openeyes.ophdrprescription_item
+WHERE prescription_id NOT IN (
+    SELECT id
+    FROM openeyes.et_ophdrprescription_details
+);
+
+DELETE FROM openeyes.ophinbiometry_calculation_formula
+WHERE created_user_id NOT IN (
+    SELECT id
+    FROM openeyes.user
+);
+
+DELETE FROM openeyes.ophinbiometry_calculation_formula
+WHERE last_modified_user_id NOT IN (
+    SELECT id
+    FROM openeyes.user
+);
+
+DELETE FROM openeyes.ophinbiometry_lenstype_lens
+WHERE created_user_id NOT IN (
+    SELECT id
+    FROM openeyes.user
+);
+
+DELETE FROM openeyes.ophinbiometry_lenstype_lens
+WHERE last_modified_user_id NOT IN (
+    SELECT id
+    FROM openeyes.user
+);
+
+DELETE FROM openeyes.ophtrconsent_procedure_add_procs_add_procs
+WHERE element_id NOT IN (
+    SELECT id
+    FROM openeyes.et_ophtrconsent_procedure
+);
+
+DELETE FROM openeyes.ophtrconsent_procedure_anaesthetic_type
+WHERE et_ophtrconsent_procedure_id NOT IN (
+    SELECT id
+    FROM openeyes.et_ophtrconsent_procedure
+);
+
+DELETE FROM openeyes.ophtrconsent_procedure_procedures_procedures
+WHERE element_id NOT IN (
+    SELECT id
+    FROM openeyes.et_ophtrconsent_procedure
+);
+
+DELETE FROM openeyes.ophtrintravitinjection_complicat_assignment
+WHERE element_id NOT IN (
+    SELECT id
+    FROM openeyes.et_ophtrintravitinjection_complications
+);
+
+DELETE FROM openeyes.ophtrintravitinjection_ioplowering_assign
+WHERE element_id NOT IN (
+    SELECT id
+    FROM openeyes.et_ophtrintravitinjection_treatment
+);
+
+DELETE FROM openeyes.ophtrlaser_laserprocedure_assignment
+WHERE treatment_id NOT IN (
+    SELECT id
+    FROM openeyes.et_ophtrlaser_treatment
+);
+
+DELETE FROM openeyes.ophtroperationbooking_scheduleope_patientunavail
+WHERE element_id NOT IN (
+    SELECT id
+    FROM openeyes.et_ophtroperationbooking_scheduleope
+);
+
+DELETE FROM openeyes.ophtroperationnote_anaesthetic_anaesthetic_agent
+WHERE et_ophtroperationnote_anaesthetic_id NOT IN (
+    SELECT id
+    FROM openeyes.et_ophtroperationnote_anaesthetic
+);
+
+DELETE FROM openeyes.ophtroperationnote_anaesthetic_anaesthetic_complication
+WHERE et_ophtroperationnote_anaesthetic_id NOT IN (
+    SELECT id
+    FROM openeyes.et_ophtroperationnote_anaesthetic
+);
+
+DELETE FROM openeyes.ophtroperationnote_anaesthetic_anaesthetic_delivery
+WHERE et_ophtroperationnote_anaesthetic_id NOT IN (
+    SELECT id
+    FROM openeyes.et_ophtroperationnote_anaesthetic
+);
+
+DELETE FROM openeyes.ophtroperationnote_anaesthetic_anaesthetic_type
+WHERE et_ophtroperationnote_anaesthetic_id NOT IN (
+    SELECT id
+    FROM openeyes.et_ophtroperationnote_anaesthetic
+);
+
+DELETE FROM openeyes.ophtroperationnote_cataract_complication
+WHERE cataract_id NOT IN (
+    SELECT id
+    FROM openeyes.et_ophtroperationnote_cataract
+);
+
+DELETE FROM openeyes.ophtroperationnote_cataract_operative_device
+WHERE cataract_id NOT IN (
+    SELECT id
+    FROM openeyes.et_ophtroperationnote_cataract
+);
+
+DELETE FROM openeyes.ophtroperationnote_postop_drugs_drug
+WHERE ophtroperationnote_postop_drugs_id NOT IN (
+    SELECT id
+    FROM openeyes.et_ophtroperationnote_postop_drugs
+);
+
+DELETE FROM openeyes.ophtroperationnote_procedurelist_procedure_assignment
+WHERE procedurelist_id NOT IN (
+    SELECT id
+    FROM openeyes.et_ophtroperationnote_procedurelist
+);
+
+DELETE FROM openeyes.patientticketing_queuesetuser
+WHERE user_id NOT IN (
+    SELECT id
+    FROM openeyes.user
+);
+
+DELETE FROM openeyes.patientticketing_ticketqueue_assignment
+WHERE assignment_firm_id NOT IN (
+    SELECT id
+    FROM openeyes.firm
+);
+
+DELETE FROM openeyes.patientticketing_ticketqueue_assignment
+WHERE ticket_id NOT IN (
+    SELECT id
+    FROM openeyes.patientticketing_ticket
+);
+
+DELETE FROM openeyes.site
+WHERE contact_id NOT IN (
+    SELECT id
+    FROM openeyes.contact
+);
+
+DELETE FROM openeyes.site
+WHERE institution_id NOT IN (
+    SELECT id
+    FROM openeyes.institution
+);
+
+DELETE FROM openeyes.site
+WHERE replyto_contact_id NOT IN (
+    SELECT id
+    FROM openeyes.contact
+);
+
+DELETE FROM openeyes.ophcocorrespondence_firm_site_secretary
+WHERE site_id NOT IN (
+    SELECT id
+    FROM openeyes.site
+);
+
+DELETE FROM openeyes.ophcocorrespondence_letter_macro
+WHERE site_id NOT IN (
+    SELECT id
+    FROM openeyes.site
+);
+
+DELETE FROM openeyes.ophcocorrespondence_letter_string
+WHERE site_id NOT IN (
+    SELECT id
+    FROM openeyes.site
+);
+
+DELETE FROM openeyes.ophcotherapya_email_recipient
+WHERE site_id NOT IN (
+    SELECT id
+    FROM openeyes.site
+);
+
+DELETE FROM openeyes.ophdrprescription_item_taper
+WHERE item_id NOT IN (
+    SELECT id
+    FROM openeyes.ophdrprescription_item
+);
+
+DELETE FROM openeyes.ophtroperationnote_postop_site_subspecialty_drug
+WHERE site_id NOT IN (
+    SELECT id
+    FROM openeyes.site
+);
+
+DELETE FROM openeyes.site_subspecialty_anaesthetic_agent
+WHERE site_id NOT IN (
+    SELECT id
+    FROM openeyes.site
+);
+
+DELETE FROM openeyes.site_subspecialty_drug
+WHERE site_id NOT IN (
+    SELECT id
+    FROM openeyes.site
+);
+SET FOREIGN_KEY_CHECKS = 1;
+
 ;;
 " > /tmp/openeyes-mysql-cera-setup.sql
 
