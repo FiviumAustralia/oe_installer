@@ -205,6 +205,7 @@ DELETE FROM trial_patient;
 DELETE FROM unique_codes_mapping;
 DELETE FROM worklist_patient;
 DELETE FROM gp;
+DELETE FROM institution WHERE remote_id != 'CERA';
 
 DELETE FROM firm
 WHERE name NOT LIKE '%firm'
@@ -223,7 +224,6 @@ WHERE id != 1
 SET FOREIGN_KEY_CHECKS = 1;
 
 UPDATE firm SET active = FALSE WHERE id !=1 AND consultant_id IS NOT NULL;
-UPDATE institution SET active = FALSE WHERE LOWER(name) NOT LIKE '%center for eye research%';
 UPDATE site SET active = FALSE WHERE remote_id != 'CERA';
 ;;
 " > /tmp/openeyes-mysql-cera-setup.sql
