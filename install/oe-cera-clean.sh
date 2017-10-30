@@ -218,7 +218,12 @@ WHERE id != 1
     SELECT contact_id
     FROM institution
     WHERE remote_id = 'CERA'
-);
+  )
+  AND id NOT IN (
+    SELECT contact_id
+    FROM site 
+    WHERE remote_id = 'CERA'
+  );
 
 
 SET FOREIGN_KEY_CHECKS = 1;
