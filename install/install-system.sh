@@ -49,7 +49,7 @@ echo Installing required system packages
 export DEBIAN_FRONTEND=noninteractive
 debconf-set-selections <<< 'mariadb-server-5.5 mysql-server/root_password password password'
 debconf-set-selections <<< 'mariadb-server-5.5 mysql-server/root_password_again password password'
-apt install -y git-core libapache2-mod-php5.6 php5.6-cli php5.6-mysql php5.6-ldap php5.6-curl php5.6-xsl php5.6-gd imagemagick php5.6-imagick libjpeg62 mariadb-server mariadb-client debconf-utils unzip xfonts-75dpi default-jre libgamin0 gamin openjdk-8-jdk xfonts-base ruby ant libbatik-java libreoffice-core libreoffice-common libreoffice-writer php5.6-mcrypt node.js npm
+apt install -y git-core libapache2-mod-php5.6 php5.6-cli php5.6-mysql php5.6-ldap php5.6-curl php5.6-xsl php5.6-gd imagemagick php5.6-imagick php5.6-mbstring libjpeg62 mariadb-server mariadb-client debconf-utils unzip xfonts-75dpi default-jre libgamin0 gamin openjdk-8-jdk xfonts-base ruby ant libbatik-java libreoffice-core libreoffice-common libreoffice-writer php5.6-mcrypt node.js npm
 
 
 # wkhtmltox is now bundled in the repository. Original download location is:
