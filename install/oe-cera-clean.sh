@@ -212,6 +212,10 @@ WHERE name NOT LIKE '%firm'
   AND name != 'Admin User';
 DELETE FROM user WHERE id != 1;
 
+UPDATE user
+SET last_firm_id = 1
+WHERE id = 1;
+
 DELETE FROM contact
 WHERE id != 1
   AND id NOT IN (
@@ -503,6 +507,9 @@ WHERE replyto_contact_id NOT IN (
     SELECT id
     FROM openeyes.contact
 );
+
+UPDATE user
+SET last_site_id = (SELECT id FROM site LIMIT 1);
 
 DELETE FROM openeyes.ophcocorrespondence_firm_site_secretary
 WHERE site_id NOT IN (
