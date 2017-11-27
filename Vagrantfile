@@ -48,13 +48,19 @@ end
 AutoNetwork.default_pool = "172.16.0.0/24"
 
 $script = <<SCRIPT
+set -e
+
 cd /vagrant/install
-bash install-system.sh
-bash install-oe.sh -f -d --accept
+sudo apt-get install git -y
+sudo add-apt-repository ppa:ondrej/php -y
+sudo apt-get update
+sudo ./install-system.sh
+sudo ./install-oe.sh --branch feature/v2-cera -r FiviumAustralia
+sudo ./oe-cera-clean.sh
 SCRIPT
 
 Vagrant.configure(2) do |config|
-  config.vm.box = "ubuntu/trusty64"
+  config.vm.box = "ubuntu/xenial64"
   config.vm.box_check_update = false
 
   config.vm.hostname = "openeyes.vm"
