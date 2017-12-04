@@ -56,7 +56,22 @@ sudo add-apt-repository ppa:ondrej/php -y
 sudo apt-get update
 sudo ./install-system.sh
 sudo ./install-oe.sh --branch feature/v2-cera -r FiviumAustralia
+
+# Clean extraneous sample data
 sudo ./oe-cera-clean.sh
+
+# Create the test database from the sample data set
+sudo mysql -e "CREATE DATABASE openeyes_test"
+sudo mysql openeyes_test < /var/www/openeyes/protected/modules/sample/sql/openeyes_sample_data.sql
+sudo mysql -e "GRANT ALL PRIVILEGES ON openeyes_test.* TO 'openeyes'@'%'"
+
+cd /var/www/openeyes/protected/
+# Use the sample test connection file
+cp config/local.sample/test.php config/test
+# Migrate the test database
+php yiic migrate --connectionID=testdb --interactive=0
+php yiic migratemodules --connectionID=testdb --interactive=0
+
 SCRIPT
 
 Vagrant.configure(2) do |config|
